@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Tic Tac Toe</title>
+<style>
+            body {
+                font-family: Arial, sans-serif;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                background-color: #282c36;
+                color: white;
+            }
+
+            #content {
+                text-align: center;
+                padding: 20px;
+                background: #1e1e1e;
+                border-radius: 15px;
+                box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+            }
+
+            #message {
+                font-size: 20px;
+                margin-bottom: 15px;
+                font-weight: bold;
+                color: #ffcc00;
+                transition: 0.3s ease-in-out;
+            }
+
+            .row {
+                display: inline-grid;
+                justify-content: center;
+            }
+
+            button {
+                width: 80px;
+                height: 80px;
+                font-size: 32px;
+                font-weight: bold;
+                text-align: center;
+                cursor: pointer;
+                border: 2px solid #ffcc00;
+                background-color: #444;
+                color: white;
+                border-radius: 10px;
+                transition: 0.2s;
+            }
+
+            button:hover {
+                background-color: #ffcc00;
+                color: black;
+            }
+
+            button:active {
+                background-color: #ffaa00;
+                transform: scale(0.95);
+            }
+
+            button:disabled {
+                cursor: not-allowed;
+                background-color: #666;
+            }
+
+            reset-btn {
+                
+                width: 100%;
+                padding: 10px;
+                font-size: 18px;
+                background: #ff4444;
+                border: none;
+                color: white;
+                font-weight: bold;
+                border-radius: 10px;
+                cursor: pointer;
+                transition: 0.2s;
+            }
+			    
+			.clear-button button {
+   				  width: 100%;
+				  padding: 10px;
+   				  font-size: 18px;
+   				  background-color: #ff4444;
+  				  border: none;
+  				  color: white;
+ 			 	  font-weight: bold;
+   	   			  border-radius: 10px;
+                  cursor: pointer;
+                  transition: 0.2s;
+				  box-sizing: border-box;
+                 }
+
+			 .clear-button button:hover {
+   				 background-color: #cc0000;
+				 color: black:
+			}
+	
+			 .clear-button button:active {
+                   
+                 background-color: #ffaa00;
+            }
+	
+	         .clear-button button:disabled {
+                 cursor: not-allowed;
+                 background-color: #666;
+            }
+	
+			 clear-button{
+			     padding:40px;
+			}
+			
+
+            #reset-btn:hover {
+                background: #ff6666;
+            }
+        </style>
+    </head>
+
+    <body>
+           <div id="content">
+            <div id="message"></div>
+            <div class="row">
+                <button class="slot" onclick="placePiece(this, 0, 0)"></button>
+                <button class="slot" onclick="placePiece(this, 0, 1)"></button>
+                <button class="slot" onclick="placePiece(this, 0, 2)"></button>
+            </div>
+            <div class="row">
+                <button class="slot" onclick="placePiece(this, 1, 0)"></button>
+                <button class="slot" onclick="placePiece(this, 1, 1)"></button>
+                <button class="slot" onclick="placePiece(this, 1, 2)"></button>
+            </div>
+            <div class="row">
+                <button class="slot" onclick="placePiece(this, 2, 0)"></button>
+                <button class="slot" onclick="placePiece(this, 2, 1)"></button>
+                <button class="slot" onclick="placePiece(this, 2, 2)"></button>
+            </div>
+            <div class="clear-button">
+                <button onclick="clearBoard()">Clear</button>
+            </div>
+          </div>
+          <script>
+            let gameBoard;
+            let isXTurn = true;
+            let gameOver = false;
+
+            function sendMessage(message) {
+                document.getElementById("message").innerHTML = message;
+            }
+
+            function placePiece(slot, x, y) {
+                if (gameOver || gameBoard[x][y] !== 0) return; // Prevent moves after game over or on occupied slots
+
+                gameBoard[x][y] = isXTurn ? 1 : -1;
+                slot.innerHTML = isXTurn ? "X" : "O";
+
+                if (checkForWinner()) return;
+
+                isXTurn = !isXTurn;
+
+                if (!isXTurn) {
+                    sendMessage("AI is thinking...");
+                    setTimeout(computerMove, 500);
+                } else {
+                    sendMessage("Your turn!");
+                }
+            }
+
+            function isSumWinner(sum) {
+                if (sum === 3) {
+                    sendMessage("X has won!!!");
+                    gameOver = true;
+                    return true;
+                } else if (sum === -3) {
+                    sendMessage("O has won!!!");
+                    gameOver = true;
+                    return true;
+                }
+                return false;
+            }
+
+            function checkForWinner() {
+                for (let x = 0; x < 3; x++) {
+                    if (isSumWinner(gameBoard[x][0] + gameBoard[x][1] + gameBoard[x][2])) return true;
+                }
+                for (let y = 0; y < 3; y++) {
+                    if (isSumWinner(gameBoard[0][y] + gameBoard[1][y] + gameBoard[2][y])) return true;
+                }
+                if (isSumWinner(gameBoard[0][0] + gameBoard[1][1] + gameBoard[2][2])) return true;
+                if (isSumWinner(gameBoard[0][2] + gameBoard[1][1] + gameBoard[2][0])) return true;
+
+                // Check if board is full (Tie)
+                if (gameBoard.flat().every(cell => cell !== 0)) {
+                    sendMessage("It's a tie!");
+                    gameOver = true;
+                    return true;
+                }
+
+                return false;
+            }
+
+            function clearBoard() {
+                gameBoard = [
+                    [0, 0, 0],
+                    [0, 0, 0],
+                    [0, 0, 0]
+                ];
+                isXTurn = true;
+                gameOver = false;
+                sendMessage("Your turn!");
+
+                let slots = document.getElementsByClassName("slot");
+                for (let slot of slots) {
+                    slot.innerHTML = "";
+                }
+            }
+
+            function computerMove() {
+                if (gameOver) return;
+
+                let emptySlots = [];
+                let buttons = document.getElementsByClassName("slot");
+
+                for (let i = 0; i < 3; i++) {
+                    for (let j = 0; j < 3; j++) {
+                        if (gameBoard[i][j] === 0) emptySlots.push({ x: i, y: j });
+                    }
+                }
+
+                if (emptySlots.length === 0) return;
+
+                let move = emptySlots[Math.floor(Math.random() * emptySlots.length)];
+                let index = move.x * 3 + move.y;
+                placePiece(buttons[index], move.x, move.y);
+            }
+
+            clearBoard();
+        </script>
+    </body>
+</html>

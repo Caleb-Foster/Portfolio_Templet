@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Calculator</title>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Calculator">
+    <meta name="description" content="A simple calculator">
+    <style>
+        /* General Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #6E6F6E;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Calculator Container */
+        .calculator {
+            background: #333;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            width: 400px;
+            height: 425px;
+            border: solid #111111;
+        }
+
+        /* Input Field */
+        #display {
+            width: 90%;
+            padding: 15px;
+            font-size: 1.5rem;
+            text-align: right;
+            border: none;
+            border-radius: 10px;
+            outline: none;
+            margin-bottom: 20px;
+            background-color: #222;
+            color: white;
+        }
+
+        /* Buttons Grid */
+        .number-group {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .symbol-group {
+            display: grid;
+            gap: 15px;
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        /* Button Styling */
+        button {
+            padding: 15px;
+            font-size: 1.3rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+
+        /* Number Buttons */
+        .number-group button {
+            background-color: #040100;
+            color: white;
+        }
+
+        /* Operator Buttons */
+        .operator {
+            background-color: #ff9800; 
+            color: white;
+        }
+
+        /* Equal Button */
+        .equal {
+            background-color: #2ecc71; 
+            grid-column: span 2;
+        }
+
+        /* Clear Button */
+        .clear {
+            background-color: #ff9800 ; 
+			grid-column: span 2;
+        }
+
+        /* Button Hover & Active Effects */
+        button:hover {
+            background-color: #666;
+        }
+
+        .operator:hover {
+            background-color: #e68a00;
+        }
+
+        .equal:hover {
+            background-color: #27ae60;
+        }
+
+        .clear:hover {
+            background-color: #D37F02 ;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <input id="display" type="text" readonly />
+        <div class="number-group">
+            <button onclick="addToDisplay('7')">7</button>
+            <button onclick="addToDisplay('8')">8</button>
+            <button onclick="addToDisplay('9')">9</button>
+            <button class="operator" onclick="addToDisplay('+')">+</button>
+
+            <button onclick="addToDisplay('4')">4</button>
+            <button onclick="addToDisplay('5')">5</button>
+            <button onclick="addToDisplay('6')">6</button>
+            <button class="operator" onclick="addToDisplay('-')">-</button>
+
+            <button onclick="addToDisplay('1')">1</button>
+            <button onclick="addToDisplay('2')">2</button>
+            <button onclick="addToDisplay('3')">3</button>
+            <button class="operator" onclick="addToDisplay('*')">X</button>
+
+            <button onclick="toggleSign();">+/-</button>
+            <button onclick="addToDisplay('0')">0</button>
+            <button onclick="addToDisplay('.')">.</button>
+            <button class="operator" onclick="addToDisplay('/')">&#247;</button>
+        </div>
+        <br>
+        <div class="symbol-group">
+			<button class="clear" onclick="clearDisplay();">C</button>
+            <button class="equal" onclick="calculate();">=</button>
+            
+        </div>
+        <br>
+    </div>
+
+    <script>
+        function addToDisplay(value) {
+            document.getElementById("display").value += value;
+        }
+
+        function calculate() {
+            try {
+                let display = document.getElementById("display");
+                display.value = eval(display.value); // Compute result
+            } catch {
+                alert("Invalid Expression!");
+            }
+        }
+
+        function clearDisplay() {
+            document.getElementById("display").value = "";
+        }
+
+        function toggleSign() {
+            let display = document.getElementById("display");
+            if (display.value) {
+                display.value = parseFloat(display.value) * -1;
+            }
+        }
+    </script>
+</body>
+</html>
